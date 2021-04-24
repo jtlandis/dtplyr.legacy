@@ -4,8 +4,13 @@ mutate.data.table <- function(.data, ...) {
   
   dt <- .data
   .dots <- enquos(..., .named = T)
-  if(is_scoped_fn(.dots)){
-    .dots <- unscope_dots(.dots, dt)
+  scoped_fn <- is_scoped_fn(.dots)
+  if(any(scoped_fn)){
+    browser()
+    .dots_list <- as.list(.dots)
+    .dots_list[scoped_fn] <- unscope_dots(.dots_list[scoped_fn], dt)
+    names(.dots_list)[scoped_fn] <- ""
+    .dots <- quos(!!!unlist(.dots_list))
   }
   
   is_dpndnt <- dependent_quos(.dots)
