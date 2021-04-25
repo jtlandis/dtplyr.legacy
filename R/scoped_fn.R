@@ -38,7 +38,7 @@ new_dt_translate_mask <- function(.data){
                 across = function(.cols = everything(),
                                   .fns = NULL, ...,
                                   .names = NULL){
-                  browser()
+                  
                   loc <- tidyselect::eval_select(expr({{.cols}}), .dt)
                   loc <- exclude_group_vars(loc, .dt)
                   quo_names <- map(syms(names(loc)), ~quo(!!.x))
