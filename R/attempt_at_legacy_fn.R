@@ -16,29 +16,23 @@ DT %>% group_by(test)
 
 DT %>%
   mutate(
-    V4= paste(V3,V2),
-    V5 = case_when(V1%%2==1 ~ paste(V4, V3),
-                   TRUE ~ ""),
-    V6 = paste(V1, V2)
+    V4= toupper(V3),
+    V5 = case_when(V1%%2==1 ~ V4,
+                   TRUE ~ tolower(V4)),
+    V6 = V1 + V2
   )
 
-DT <- DT %>% group_by(V3)
+DT <- DT %>% group_by(V3, V5)
 
-DT2 <- copy(DT) %>% mutate(across(.fns = list(chr = as.character, fct = factor), .names = "{.col}_{.fn}"))
+DT2 <- copy(DT) %>% 
+  mutate(across(c(V1,V2),
+                list(t1 = ~ sum(.x), t2 = as.character),
+                .names = "{.col}_{.fn}"),
+         V7 = 20)
 
-my_mask <- function(.data) {
-  top <- new_environment(list(c = base::paste))
-  bottom <- env(top,
-    head = function(x, n = 5, ...){
-      .data[1:n,]
-    }
-  )
-  
-  # env_ <- new_environment(list(.data = .data))
-  # environment(bottom$head) <- env_
-  
-  new_data_mask(bottom, top)
+
+translate_quos <- function(x){
   
 }
 
-eval_tidy(quo(head(mtcars, n = 10)), m)
+

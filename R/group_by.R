@@ -11,8 +11,14 @@ group_by.data.table <- function(.data, ...){
   }
   
   attr(dt, "groups") <- names_
+  dt <- as_tbl_dt(dt)
   structure(dt, class = c("grouped_dt",setdiff(class(dt), "grouped_dt")))
   
+}
+
+ungroup.data.table <- function(x) {
+  attr(x, "groups") <- NULL
+  structure(x, class = setdiff(class(x), "grouped_dt"))
 }
 
 group_vars.grouped_dt <- function(x) attr(x, "groups")
